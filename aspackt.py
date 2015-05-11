@@ -73,6 +73,11 @@ def find_fit(item, box):
                 return Coordinate(cidx, ridx)
     return None
 
+class ItemArrangement(dict):
+    def set_bounds(self, width, height):
+        self.width = width
+        self.height = height
+
 def arrangement(items, aspect_ratio=AspectRatio(4, 3)):
     """Given a collection of items return a map of item -> position.
 
@@ -87,9 +92,11 @@ def arrangement(items, aspect_ratio=AspectRatio(4, 3)):
     first_item = next_item(items, smallest_wh_sum=False)
     items.remove(first_item)
 
-    final_coordinates = {first_item: Coordinate(0, 0)}
+    final_coordinates = ItemArrangement()
+    final_coordinates[first_item] =  Coordinate(0, 0)
     boxes = aspect_ratio_boxes(aspect_ratio)
     bounding_box = smallest_fit_for(first_item, boxes)
+    final_coordinates.set_bounds(len(bounding_box[0]), len(bounding_box))
     insert_item_into_box_at(first_item, bounding_box, Coordinate(0, 0))
 
     while items:
@@ -99,6 +106,7 @@ def arrangement(items, aspect_ratio=AspectRatio(4, 3)):
         coords = find_fit(arrangee, bounding_box)
         while coords is None:
             ratio_box = next(boxes)
+            final_coordinates.set_bounds(ratio_box.width, ratio_box.height)
             line_additions = [
                 0 for x in range(ratio_box.width - len(bounding_box[0]))
             ]

@@ -19,3 +19,6 @@ class AspacktTest(TestCase):
         self.assertEqual(Coordinate(2, 0), arranged[d])
         self.assertEqual(Coordinate(4, 0), arranged[c])
         self.assertEqual(Coordinate(4, 2), arranged[a])
+
+        self.assertEqual(12, arranged.width)
+        self.assertEqual(9, arranged.height)
