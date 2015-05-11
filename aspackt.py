@@ -21,16 +21,16 @@ Coordinate = namedtuple('Coordinate', ['x', 'y'])
 def area(i):
     return i.width * i.height
 
-def next_item(items, smallest_wh_sum=True):
+def next_item(items, largest_wh_sum=False):
     largest_area = area(items[0])
     largest_items = [i for i in items if area(i) == largest_area]
 
     if len(largest_items) > 1:
         largest_items.sort(
             key=lambda i: i.width + i.height,
-            reverse=smallest_wh_sum
+            reverse=largest_wh_sum
         )
-    return largest_items.pop()
+    return largest_items[0]
 
 def aspect_ratio_boxes(aspect_ratio):
     w_step, h_step = aspect_ratio
@@ -55,12 +55,12 @@ def insert_item_into_box_at(item, box, at):
             box[y+at.y][x+at.x] = 1
 
 def find_fit(item, box):
-    available_rows = [i for i, row in enumerate(box) if 0 in row]
+    available_rows = (i for i, row in enumerate(box) if 0 in row)
     for ridx in available_rows:
         end_y = ridx + item.height
         if end_y >= len(box):
             break
-        available_columns = [i for i, x in enumerate(box[ridx]) if x == 0]
+        available_columns = (i for i, x in enumerate(box[ridx]) if x == 0)
         for cidx in available_columns:
             end_x = cidx + item.width
             if end_x >= len(box[ridx]):
@@ -90,7 +90,7 @@ def arrangement(coll, aspect_ratio=AspectRatio(4, 3)):
     """
     items = coll.copy()
     items.sort(key=area, reverse=True)
-    first_item = next_item(items, smallest_wh_sum=False)
+    first_item = next_item(items, largest_wh_sum=True)
     items.remove(first_item)
 
     final_coordinates = ItemArrangement()
@@ -111,8 +111,8 @@ def arrangement(coll, aspect_ratio=AspectRatio(4, 3)):
             line_additions = [
                 0 for x in range(ratio_box.width - len(bounding_box[0]))
             ]
-            for i, x in enumerate(bounding_box):
-                bounding_box[i].extend(line_additions)
+            for b in bounding_box:
+                b.extend(line_additions)
             for i in range(ratio_box.height - len(bounding_box)):
                 bounding_box.append([0 for x in range(ratio_box.width)])
             coords = find_fit(arrangee, bounding_box)
