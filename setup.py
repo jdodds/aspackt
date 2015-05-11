@@ -6,7 +6,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='aspackt',
-    version='1.0.1',
+    version='1.0.2',
     description='Arrange rectangles while approximating an aspect ratio',
     url='https://github.com/jdodds/aspackt',
     author='Jeremiah Dodds',
