@@ -1,3 +1,17 @@
+"""Arranges rectangles such that their bounding box approximates a particular
+aspect ratio.
+
+Example usage:
+
+from aspackt import arrangement, AspectRatio
+
+# some collection of items with width and height attributes
+rectangles = [...]
+
+# get a map of items -> top-left-coordinate
+arranged = arrangement(rectangles, AspectRatio(4, 3))
+"""
+
 from collections import namedtuple
 
 AspectRatio = namedtuple('AspectRatio', ['width', 'height'])
@@ -60,6 +74,15 @@ def find_fit(item, box):
     return None
 
 def arrangement(items, aspect_ratio=AspectRatio(4, 3)):
+    """Given a collection of items return a map of item -> position.
+
+    The positions returned will be such that the bounding box of the arrangement
+    will approximate the given aspect ratio.
+
+    Items are expected to have width and height attributes, the aspect ratio is
+    expected to have x and y attributes. A named tuple, aspackt.AspectRatio
+    exists for convenience.
+    """
     items.sort(key=area, reverse=True)
     first_item = next_item(items, smallest_wh_sum=False)
     items.remove(first_item)
