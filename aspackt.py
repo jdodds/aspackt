@@ -57,8 +57,7 @@ def find_fit(item, box):
                     break
             else:
                 return Coordinate(cidx, ridx)
-    else:
-        return None
+    return None
 
 def arrangement(items, aspect_ratio=AspectRatio(4, 3)):
     items.sort(key=area, reverse=True)
