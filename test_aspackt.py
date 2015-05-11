@@ -13,7 +13,8 @@ class AspacktTest(TestCase):
         d = Box(2, 4)
 
         ratio = AspectRatio(4, 3)
-        arranged = arrangement([a,b,c,d], aspect_ratio=ratio)
+        items = [a,b,c,d]
+        arranged = arrangement(items, aspect_ratio=ratio)
 
         self.assertEqual(Coordinate(0, 0), arranged[b])
         self.assertEqual(Coordinate(2, 0), arranged[d])
@@ -22,3 +23,8 @@ class AspacktTest(TestCase):
 
         self.assertEqual(12, arranged.width)
         self.assertEqual(9, arranged.height)
+
+        self.assertEqual(
+            [a,b,c,d], items,
+            "we don't want to clobber the given list"
+        )

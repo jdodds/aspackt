@@ -78,7 +78,7 @@ class ItemArrangement(dict):
         self.width = width
         self.height = height
 
-def arrangement(items, aspect_ratio=AspectRatio(4, 3)):
+def arrangement(coll, aspect_ratio=AspectRatio(4, 3)):
     """Given a collection of items return a map of item -> position.
 
     The positions returned will be such that the bounding box of the arrangement
@@ -88,6 +88,7 @@ def arrangement(items, aspect_ratio=AspectRatio(4, 3)):
     expected to have x and y attributes. A named tuple, aspackt.AspectRatio
     exists for convenience.
     """
+    items = coll.copy()
     items.sort(key=area, reverse=True)
     first_item = next_item(items, smallest_wh_sum=False)
     items.remove(first_item)
